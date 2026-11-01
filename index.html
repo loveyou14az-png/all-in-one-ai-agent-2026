@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One AI Agent</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 15px;
+            background: #1e293b;
+        }
+
+        header h1 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .feature {
+            background: #1e293b;
+            padding: 20px 10px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        .feature span {
+            font-size: 30px;
+        }
+
+        .feature h3 {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .chatbox {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        #answer {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            min-height: 50px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        button {
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0369a1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🤖 All-in-One AI Agent</h1>
+        <p>Your Smart AI Assistant</p>
+    </header>
+
+    <div class="container">
+
+        <h2>Our AI Features</h2>
+
+        <div class="features">
+
+            <div class="feature">
+                <span>💬</span>
+                <h3>AI Chatbot</h3>
+            </div>
+
+            <div class="feature">
+                <span>🎬</span>
+                <h3>YouTube Assistant</h3>
+            </div>
+
+            <div class="feature">
+                <span>💼</span>
+                <h3>Business AI</h3>
+            </div>
+
+            <div class="feature">
+                <span>⚡</span>
+                <h3>Automation</h3>
+            </div>
+
+            <div class="feature">
+                <span>🌐</span>
+                <h3>Website Builder</h3>
+            </div>
+
+        </div>
+
+        <div class="chatbox">
+            <h2>💬 AI Chat Assistant</h2>
+
+            <div id="answer">
+                Welcome! I am your AI assistant.
+                Ask me anything!
+            </div>
+
+            <textarea id="question"
+                rows="3"
+                placeholder="Type your question here..."></textarea>
+
+            <button onclick="askAI()">Send Message</button>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 All-in-One AI Agent</p>
+        <p>Created with AI 🚀</p>
+    </footer>
+
+    <script>
+        function askAI() {
+
+            const question = document
+                .getElementById("question")
+                .value.trim();
+
+            const answer = document
+                .getElementById("answer");
+
+            if (question === "") {
+                answer.innerText = "Please enter a question first.";
+                return;
+            }
+
+            answer.innerText =
+                "Your question: " + question +
+                "\n\nOur AI system will be connected in the next step.";
+
+        }
+    </script>
+
+</body>
+  </html>
+  
