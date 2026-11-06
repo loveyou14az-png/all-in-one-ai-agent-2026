@@ -178,27 +178,39 @@
         <p>Created with AI 🚀</p>
     </footer>
 
-    <script>
-        function askAI() {
+    async function askAI() {
+    const question = document
+        .getElementById("question")
+        .value.trim();
 
-            const question = document
-                .getElementById("question")
-                .value.trim();
+    const answer = document
+        .getElementById("answer");
 
-            const answer = document
-                .getElementById("answer");
+    if (!question) {
+        answer.innerText = "Please enter a question first.";
+        return;
+    }
 
-            if (question === "") {
-                answer.innerText = "Please enter a question first.";
-                return;
-            }
+    answer.innerText = "AI is thinking...";
 
-            answer.innerText =
-                "Your question: " + question +
-                "\n\nOur AI system will be connected in the next step.";
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ question })
+        });
 
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "AI request failed");
         }
-    </script>
 
-</body>
-  </html>
+        answer.innerText = data.answer;
+
+    } catch (error) {
+        answer.innerText = "Error: " + error.message;
+    }
+}
