@@ -29,8 +29,20 @@ export default async function handler(req, res) {
         error: data.error?.message || "AI request failed"
       });
     }
+const answer = (data.output || [])
+  .filter(item => item.type === "message")
+  .flatMap(item => item.content || [])
+  .filter(item => item.type === "output_text")
+  .map(item => item.text)
+  .join("\n");
+const answer = (data.output || [])
+  .filter(item => item.type === "message")
+  .flatMap(item => item.content || [])
+  .filter(item => item.type === "output_text")
+  .map(item => item.text)
+  .join("\n");
 
-    return res.status(200).json({ answer: data.output_text });
+return res.status(200).json({ answer });
 
   } catch (error) {
     return res.status(500).json({ error: "Server error" });
