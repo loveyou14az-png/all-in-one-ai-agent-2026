@@ -9,7 +9,7 @@ module.exports = async function handler(req, res) {
   try {
     const { question } = req.body || {};
 
-    if (!question) {
+    if (!question || typeof question !== "string") {
       return res.status(400).json({
         error: "Question is required"
       });
@@ -41,13 +41,28 @@ module.exports = async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
+      console.error("OpenAI API Error:", data);
+
       return res.status(response.status).json({
         error: data.error?.message || "OpenAI API error"
       });
     }
 
+    const answer = (data.output || [])
+      .filter(item => item.type === "message")
+      .flatMap(item => item.content || [])
+      .filter(item => item.type === "output_text")
+      .map(item => item.text)
+      .join("\n");
+
+    if (!answer) {
+      return res.status(500).json({
+        error: "AI returned no text response"
+      });
+    }
+
     return res.status(200).json({
-      answer: data.output_text
+      answer: answer
     });
 
   } catch (error) {
