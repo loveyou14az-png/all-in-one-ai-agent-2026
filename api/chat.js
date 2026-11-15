@@ -1,75 +1,58 @@
-
-module.exports = async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== "POST") {
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { question } = req.body || {};
-
-    if (!question || typeof question !== "string") {
-      return res.status(400).json({
-        error: "Question is required"
-      });
-    }
-
-    const apiKey = process.env.OPENAI_API_KEY;
-
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({
-        error: "OpenAI API key is missing"
-      });
+      return res.status(500).json({ error: "Gemini API key is missing" });
     }
 
-    const response = await fetch(
-      "https://api.openai.com/v1/responses",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "gpt-4.1-mini",
-          input: question
-        })
-      }
-    );
+    const question = req.body && req.body.question;
+    if (!question) {
+      return res.status(400).json({ error: "Question is required" });
+    }
+
+    const model = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+    const url =
+      "https://generativelanguage.googleapis.com/v1beta/models/" +
+      model + ":generateContent";
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: question }] }]
+      })
+    });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenAI API Error:", data);
-
       return res.status(response.status).json({
-        error: data.error?.message || "OpenAI API error"
+        error: (data.error && data.error.message) || "Gemini API error"
       });
     }
 
-    const answer = (data.output || [])
-      .filter(item => item.type === "message")
-      .flatMap(item => item.content || [])
-      .filter(item => item.type === "output_text")
-      .map(item => item.text)
-      .join("\n");
+    const parts =
+      (data.candidates &&
+        data.candidates[0] &&
+        data.candidates[0].content &&
+        data.candidates[0].content.parts) || [];
+
+    const answer = parts.map(p => p.text || "").join("\n").trim();
 
     if (!answer) {
-      return res.status(500).json({
-        error: "AI returned no text response"
-      });
+      return res.status(500).json({ error: "AI returned no text response" });
     }
 
-    return res.status(200).json({
-      answer: answer
-    });
-
+    return res.status(200).json({ answer: answer });
   } catch (error) {
     console.error("AI Error:", error);
-
-    return res.status(500).json({
-      error: error.message || "Internal server error"
-    });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
