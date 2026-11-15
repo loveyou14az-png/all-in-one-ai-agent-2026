@@ -177,40 +177,51 @@
         <p>© 2026 All-in-One AI Agent</p>
         <p>Created with AI 🚀</p>
     </footer>
+<script>
+async function askAI() {
+  const questionBox = document.getElementById("question");
+  const answerBox = document.getElementById("answer");
+  const button = document.querySelector(".chatbox button");
 
-    async function askAI() {
-    const question = document
-        .getElementById("question")
-        .value.trim();
+  const question = questionBox.value.trim();
 
-    const answer = document
-        .getElementById("answer");
+  if (!question) {
+    answerBox.innerText = "Please enter a question first.";
+    return;
+  }
 
-    if (!question) {
-        answer.innerText = "Please enter a question first.";
-        return;
+  answerBox.innerText = "AI is thinking...";
+  button.disabled = true;
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: question })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI request failed");
     }
 
-    answer.innerText = "AI is thinking...";
-
-    try {
-        const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ question })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || "AI request failed");
-        }
-
-        answer.innerText = data.answer;
-
-    } catch (error) {
-        answer.innerText = "Error: " + error.message;
-    }
+    answerBox.innerText = data.answer;
+    questionBox.value = "";
+  } catch (error) {
+    answerBox.innerText = "Error: " + error.message;
+  } finally {
+    button.disabled = false;
+  }
 }
+
+document.getElementById("question").addEventListener("keydown", function (e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    askAI();
+  }
+});
+</script>
+
+</body>
+</html>
