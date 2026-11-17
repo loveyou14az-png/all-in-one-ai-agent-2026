@@ -11,7 +11,15 @@ export default async function handler(req, res) {
   const model = (process.env.GEMINI_MODEL || "gemini-flash-latest").trim();
 
   try {
-    const { message } = req.body || {};
+    let body = req.body || {};
+    if (typeof body === "string") {
+      try { body = JSON.parse(body); } catch { body = {}; }
+    }
+
+    const message = (
+      body.question || body.message || body.prompt || body.text || ""
+    ).toString().trim();
+
     if (!message) {
       return res.status(400).json({ error: "No message provided." });
     }
@@ -42,7 +50,7 @@ export default async function handler(req, res) {
       data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join("") ||
       "No response received.";
 
-    return res.status(200).json({ reply });
+    return res.status(200).json({ answer: reply, reply });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
