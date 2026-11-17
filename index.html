@@ -86,7 +86,7 @@ async function askAI() {
       throw new Error(data.error || "AI request failed");
     }
 
-    answerBox.innerText = data.answer;
+  return res.status(200).json({ answer: reply, reply });
     questionBox.value = "";
   } catch (error) {
     answerBox.innerText = "Error: " + error.message;
