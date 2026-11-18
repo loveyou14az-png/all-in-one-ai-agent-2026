@@ -103,7 +103,24 @@ export default async function handler(req, res) {
         if (r.status === 200) {
           const text = (r.data?.candidates?.[0]?.content?.parts || [])
             .map((p) => p.text || "").join("").trim();
-          const reply = text || "No response received.";
+          const reply = text || "No response received.";    if (apiKey && req.query && req.query.test) {
+      const test = async (m) => {
+        const t0 = Date.now();
+        const r = await callGemini(
+          m,
+          { contents: [{ role: "user", parts: [{ text: "Hello" }] }] },
+          apiKey,
+          9000
+        );
+        return {
+          model: m,
+          status: r.status,
+          ms: Date.now() - t0,
+          message: r.data?.error?.message || (r.status === 200 ? "OK" : "no detail"),
+        };
+      };
+      out.test = await Promise.all([primary, fallback].map(test));
+    }
           return res.status(200).json({
             answer: reply,
             reply,
