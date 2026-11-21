@@ -1,103 +1,370 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All-in-One AI Agent</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #0f172a; color: white; min-height: 100vh; }
-        header { text-align: center; padding: 30px 15px; background: #1e293b; }
-        header h1 { color: #38bdf8; margin-bottom: 10px; }
-        header p { color: #cbd5e1; }
-        .container { max-width: 900px; margin: auto; padding: 20px; }
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin: 25px 0; }
-        .feature { background: #1e293b; padding: 20px 10px; border-radius: 12px; text-align: center; border: 1px solid #334155; }
-        .feature span { font-size: 30px; }
-        .feature h3 { margin-top: 10px; font-size: 16px; }
-        .chatbox { background: #1e293b; padding: 20px; border-radius: 12px; margin-top: 20px; }
-        #answer { background: #0f172a; padding: 15px; border-radius: 8px; margin: 15px 0; min-height: 50px; white-space: pre-wrap; line-height: 1.6; }
-        textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white; font-size: 16px; resize: vertical; }
-        button { background: #0284c7; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #0369a1; }
-        footer { text-align: center; padding: 25px; color: #94a3b8; }
-    </style>
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080d1b">
+<title>All-in-One AI Agent</title>
 
-    <header>
-        <h1>🤖 All-in-One AI Agent</h1>
-        <p>Your Smart AI Assistant</p>
-    </header>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    <div class="container">
-        <h2>Our AI Features</h2>
+body {
+  font-family: Arial, sans-serif;
+  background: #080d1b;
+  color: #f8fafc;
+  min-height: 100vh;
+}
 
-        <div class="features">
-            <div class="feature"><span>💬</span><h3>AI Chatbot</h3></div>
-            <div class="feature"><span>🎬</span><h3>YouTube Assistant</h3></div>
-            <div class="feature"><span>💼</span><h3>Business AI</h3></div>
-            <div class="feature"><span>⚡</span><h3>Automation</h3></div>
-            <div class="feature"><span>🌐</span><h3>Website Builder</h3></div>
-        </div>
+header {
+  text-align: center;
+  padding: 30px 15px;
+  background: linear-gradient(135deg, #111c35, #102c45);
+  border-bottom: 1px solid #263a55;
+}
 
-        <div class="chatbox">
-            <h2>💬 AI Chat Assistant</h2>
+header h1 {
+  color: #38bdf8;
+  font-size: 27px;
+  margin-bottom: 10px;
+}
 
-            <div id="answer">Welcome! I am your AI assistant. Ask me anything!</div>
+header p {
+  color: #b7c8dc;
+  font-size: 14px;
+}
 
-            <textarea id="question" rows="3" placeholder="Type your question here..."></textarea>
+.container {
+  max-width: 850px;
+  margin: auto;
+  padding: 20px 15px;
+}
 
-            <button type="button" onclick="askAI()">Send Message</button>
-        </div>
-    </div>
+.section-title {
+  font-size: 20px;
+  margin: 15px 0;
+}
 
-    <footer>
-        <p>© 2026 All-in-One AI Agent</p>
-        <p>Created with AI 🚀</p>
-    </footer>
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
 
-<script>
-async function askAI() {
-  const questionBox = document.getElementById("question");
-  const answerBox = document.getElementById("answer");
-  const button = document.querySelector(".chatbox button");
+.feature {
+  background: #121d32;
+  border: 1px solid #263b56;
+  border-radius: 13px;
+  padding: 20px 10px;
+  text-align: center;
+  transition: 0.2s;
+}
 
-  const question = questionBox.value.trim();
+.feature:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
 
-  if (!question) {
-    answerBox.innerText = "Please enter a question first.";
-    return;
+.feature span {
+  font-size: 28px;
+}
+
+.feature h3 {
+  font-size: 14px;
+  margin-top: 9px;
+}
+
+.feature p {
+  color: #94a3b8;
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.chatbox {
+  background: #111c30;
+  border: 1px solid #263b56;
+  border-radius: 16px;
+  margin-top: 25px;
+  padding: 17px;
+}
+
+.chat-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #293950;
+}
+
+.chat-heading h2 {
+  font-size: 18px;
+}
+
+.online {
+  color: #4ade80;
+  font-size: 11px;
+  margin-top: 5px;
+}
+
+#messages {
+  min-height: 220px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.message {
+  padding: 12px 14px;
+  border-radius: 12px;
+  max-width: 90%;
+  line-height: 1.6;
+  font-size: 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.bot {
+  align-self: flex-start;
+  background: #1e3049;
+  border: 1px solid #304762;
+}
+
+.user {
+  align-self: flex-end;
+  background: #075985;
+}
+
+.input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+textarea {
+  width: 100%;
+  padding: 14px;
+  min-height: 85px;
+  border: 1px solid #38516d;
+  border-radius: 11px;
+  background: #080f20;
+  color: white;
+  font-size: 15px;
+  resize: vertical;
+  outline: none;
+  font-family: inherit;
+}
+
+textarea:focus {
+  border-color: #38bdf8;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #0284c7, #2563eb);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.note {
+  text-align: center;
+  color: #8496ac;
+  font-size: 11px;
+  margin-top: 10px;
+}
+
+footer {
+  text-align: center;
+  padding: 30px 15px;
+  color: #8496ac;
+  font-size: 12px;
+}
+
+@media (min-width: 600px) {
+  .features {
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  answerBox.innerText = "AI is thinking...";
-  button.disabled = true;
+  .container {
+    padding: 30px 20px;
+  }
+
+  header h1 {
+    font-size: 34px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🤖 All-in-One AI Agent</h1>
+  <p>Your Smart AI Assistant</p>
+</header>
+
+<main class="container">
+
+  <h2 class="section-title">🚀 AI Features</h2>
+
+  <div class="features">
+
+    <div class="feature">
+      <span>💬</span>
+      <h3>AI Chatbot</h3>
+      <p>Ask anything</p>
+    </div>
+
+    <div class="feature">
+      <span>🎬</span>
+      <h3>YouTube Assistant</h3>
+      <p>Video ideas and scripts</p>
+    </div>
+
+    <div class="feature">
+      <span>💼</span>
+      <h3>Business AI</h3>
+      <p>Business assistance</p>
+    </div>
+
+    <div class="feature">
+      <span>⚡</span>
+      <h3>Automation</h3>
+      <p>Smart workflows</p>
+    </div>
+
+    <div class="feature">
+      <span>🌐</span>
+      <h3>Website Builder</h3>
+      <p>Create websites</p>
+    </div>
+
+    <div class="feature">
+      <span>💻</span>
+      <h3>Coding Agent</h3>
+      <p>Programming help</p>
+    </div>
+
+  </div>
+
+  <section class="chatbox">
+
+    <div class="chat-heading">
+      <span style="font-size:28px">🤖</span>
+      <div>
+        <h2>AI Chat Assistant</h2>
+        <p class="online">● Ready to help</p>
+      </div>
+    </div>
+
+    <div id="messages" aria-live="polite">
+      <div class="message bot">
+        Hello! 👋 I am your AI assistant.
+        How can I help you today?
+      </div>
+    </div>
+
+    <div class="input-area">
+      <textarea
+        id="question"
+        placeholder="Type your message here..."
+      ></textarea>
+
+      <button id="sendBtn" type="button" onclick="askAI()">
+        ➤ Send Message
+      </button>
+    </div>
+
+    <p class="note">
+      Powered by Google Gemini AI
+    </p>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2026 All-in-One AI Agent</p>
+  <p style="margin-top:8px">Created with AI 🚀</p>
+</footer>
+
+<script>
+const questionBox = document.getElementById("question");
+const messages = document.getElementById("messages");
+const sendBtn = document.getElementById("sendBtn");
+
+function addMessage(text, type) {
+  const div = document.createElement("div");
+  div.className = "message " + type;
+  div.textContent = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  return div;
+}
+
+async function askAI() {
+  const question = questionBox.value.trim();
+
+  if (!question || sendBtn.disabled) return;
+
+  addMessage(question, "user");
+
+  questionBox.value = "";
+  sendBtn.disabled = true;
+  sendBtn.textContent = "⏳ Thinking...";
+
+  const loading = addMessage("AI is thinking...", "bot");
 
   try {
     const response = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: question })
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        question: question
+      })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || "AI request failed");
+      throw new Error(data.error || "AI request failed.");
     }
 
-  return res.status(200).json({ answer: reply, reply });
-    questionBox.value = "";
+    loading.textContent =
+      data.answer || data.reply || "No response received.";
+
   } catch (error) {
-    answerBox.innerText = "Error: " + error.message;
+    loading.textContent = "Error: " + error.message;
   } finally {
-    button.disabled = false;
+    sendBtn.disabled = false;
+    sendBtn.textContent = "➤ Send Message";
+    questionBox.focus();
+    messages.scrollTop = messages.scrollHeight;
   }
 }
 
-document.getElementById("question").addEventListener("keydown", function (e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
+questionBox.addEventListener("keydown", function(event) {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
     askAI();
   }
 });
